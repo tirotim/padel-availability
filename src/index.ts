@@ -1,7 +1,12 @@
 import type { IncomingSlot } from "./feed";
 import { BOOKING_RULES } from "./rules";
 import { runAvailabilitySync, type Env as SyncEnv } from "./sync";
-import { getMeta, latestPollRun, listMatchedSlots } from "./supabase";
+import {
+  getMeta,
+  latestPollRun,
+  listMatchedSlots,
+  listPlayerNames,
+} from "./supabase";
 
 type Env = SyncEnv & {
   ASSETS: Fetcher;
@@ -23,10 +28,11 @@ export default {
     if (url.pathname === "/api/availability" && request.method === "GET") {
       try {
         requireSupabase(env);
-        const [slots, lastPoll, disclaimers] = await Promise.all([
+        const [slots, lastPoll, disclaimers, names] = await Promise.all([
           listMatchedSlots(env),
           latestPollRun(env),
           getMeta(env, "disclaimers"),
+          listPlayerNames(env),
         ]);
         return json({
           venue: env.VENUE_NAME,
@@ -35,6 +41,7 @@ export default {
           weekendsOnly: env.WEEKENDS_ONLY === "true",
           rules: BOOKING_RULES,
           disclaimers: Array.isArray(disclaimers) ? disclaimers : [],
+          names,
           lastPoll,
           slots,
         });

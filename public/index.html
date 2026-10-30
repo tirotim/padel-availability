@@ -70,7 +70,21 @@
         display: flex;
         flex-wrap: wrap;
         gap: 0.5rem;
-        margin: 1.25rem 0 1.5rem;
+        margin: 1.25rem 0 0.75rem;
+      }
+      .names {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 0 0 1.5rem;
+      }
+      .name {
+        font-size: 0.9rem;
+        font-weight: 600;
+        padding: 0.35rem 0.75rem;
+        border-radius: 999px;
+        background: var(--accent-dim);
+        color: var(--text);
       }
       .pill {
         font-size: 0.8rem;
@@ -199,6 +213,7 @@
         <p>Open slots matching your group rules for the coming weeks.</p>
       </header>
       <div class="rules" id="rules"></div>
+      <div class="names" id="names"></div>
       <p class="meta" id="meta">Loading…</p>
       <section>
         <h2>Matching slots</h2>
@@ -225,13 +240,28 @@
           minute: "2-digit",
         }).format(new Date(iso));
 
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;");
+      }
+
       function renderRules(rules) {
         const el = document.getElementById("rules");
         el.innerHTML = rules
           .map((r) => {
             const cls = r.players === 4 ? "four" : "six";
-            return `<span class="pill ${cls}">${r.label}</span>`;
+            return `<span class="pill ${cls}">${escapeHtml(r.label)}</span>`;
           })
+          .join("");
+      }
+
+      function renderNames(names) {
+        const el = document.getElementById("names");
+        el.innerHTML = (names || [])
+          .map((name) => `<span class="name">${escapeHtml(name)}</span>`)
           .join("");
       }
 
@@ -256,6 +286,7 @@
 
         document.getElementById("venue").textContent = data.venue || "Padel";
         renderRules(data.rules || []);
+        renderNames(data.names || []);
 
         const lp = data.lastPoll;
         const polled = lp?.finished_at

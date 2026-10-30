@@ -116,6 +116,21 @@ export async function listMatchedSlots(
   return (await res.json()) as MatchedSlotRow[];
 }
 
+export async function listPlayerNames(env: SupabaseEnv): Promise<string[]> {
+  const params = new URLSearchParams({
+    select: "name",
+    order: "created_at.asc",
+  });
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/players?${params}`, {
+    headers: headers(env),
+  });
+  if (!res.ok) {
+    throw new Error(`Supabase players select: ${await res.text()}`);
+  }
+  const rows = (await res.json()) as { name: string }[];
+  return rows.map((row) => row.name);
+}
+
 export async function getMeta(
   env: SupabaseEnv,
   key: string,
