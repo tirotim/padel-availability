@@ -1,0 +1,19 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "padel-availability",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-10-30",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS"
+  },
+  "triggers": {
+    "crons": ["*/15 * * * *"]
+  },
+  "vars": {
+    "WEEKS_AHEAD": "3",
+    "TIMEZONE": "Europe/London",
+    "WEEKENDS_ONLY": "false",
+    "VENUE_NAME": "Your club"
+  }
+}

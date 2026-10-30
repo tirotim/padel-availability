@@ -1,0 +1,19 @@
+{
+  "name": "padel-availability",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "types": "wrangler types",
+    "supabase:login": "supabase login",
+    "supabase:link": "supabase link --project-ref wpxkqszfnznwbpdechyq",
+    "supabase:push": "supabase db push"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261023.1",
+    "supabase": "^2.122.0",
+    "typescript": "^5.8.2",
+    "wrangler": "^4.0.0"
+  }
+}

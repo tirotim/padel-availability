@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Padel availability</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #0f1419;
+        --surface: #1a222d;
+        --border: #2a3544;
+        --text: #e8eef5;
+        --muted: #8b9cb0;
+        --accent: #3dd68c;
+        --accent-dim: #1e4d38;
+        --warn: #f5a623;
+        --four: #5b9cf5;
+        --six: #c77dff;
+      }
+      @media (prefers-color-scheme: light) {
+        :root {
+          --bg: #f4f7fb;
+          --surface: #ffffff;
+          --border: #d8e0ea;
+          --text: #1a2332;
+          --muted: #5a6b7d;
+          --accent-dim: #d4f5e4;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "DM Sans", system-ui, sans-serif;
+        background: radial-gradient(
+            ellipse 120% 80% at 50% -20%,
+            rgba(61, 214, 140, 0.12),
+            transparent
+          ),
+          var(--bg);
+        color: var(--text);
+        line-height: 1.5;
+      }
+      .wrap {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 2rem 1.25rem 3rem;
+      }
+      header h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin: 0 0 0.35rem;
+        letter-spacing: -0.02em;
+      }
+      header p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+      .rules {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 1.25rem 0 1.5rem;
+      }
+      .pill {
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 0.35rem 0.75rem;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+      }
+      .pill.four {
+        border-color: color-mix(in srgb, var(--four) 50%, var(--border));
+        color: var(--four);
+      }
+      .pill.six {
+        border-color: color-mix(in srgb, var(--six) 50%, var(--border));
+        color: var(--six);
+      }
+      .meta {
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin-bottom: 1.5rem;
+      }
+      .meta strong {
+        color: var(--text);
+      }
+      section h2 {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        margin: 0 0 0.75rem;
+      }
+      .day-group {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        overflow: hidden;
+      }
+      .day-head {
+        padding: 0.65rem 1rem;
+        font-weight: 600;
+        font-size: 0.9rem;
+        border-bottom: 1px solid var(--border);
+        background: color-mix(in srgb, var(--surface) 90%, var(--accent) 10%);
+      }
+      ul.slots {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      li.slot {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 0.5rem 1rem;
+        padding: 0.85rem 1rem;
+        border-bottom: 1px solid var(--border);
+        align-items: center;
+      }
+      li.slot:last-child {
+        border-bottom: none;
+      }
+      .slot-time {
+        font-weight: 600;
+      }
+      .slot-sub {
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+      .badge {
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 0.25rem 0.55rem;
+        border-radius: 6px;
+        white-space: nowrap;
+      }
+      .badge.four {
+        background: color-mix(in srgb, var(--four) 18%, transparent);
+        color: var(--four);
+      }
+      .badge.six {
+        background: color-mix(in srgb, var(--six) 18%, transparent);
+        color: var(--six);
+      }
+      .empty {
+        padding: 2rem 1rem;
+        text-align: center;
+        color: var(--muted);
+        background: var(--surface);
+        border: 1px dashed var(--border);
+        border-radius: 12px;
+      }
+      .disclaimers {
+        margin-top: 2rem;
+        padding: 1rem 1.1rem;
+        border-radius: 12px;
+        border: 1px solid color-mix(in srgb, var(--warn) 35%, var(--border));
+        background: color-mix(in srgb, var(--warn) 8%, var(--surface));
+      }
+      .disclaimers h2 {
+        color: var(--warn);
+        margin-bottom: 0.5rem;
+      }
+      .disclaimers ul {
+        margin: 0;
+        padding-left: 1.1rem;
+        font-size: 0.88rem;
+        color: var(--muted);
+      }
+      .disclaimers li {
+        margin-bottom: 0.45rem;
+      }
+      .err {
+        color: #f87171;
+        padding: 1rem;
+        background: var(--surface);
+        border-radius: 8px;
+        border: 1px solid #7f1d1d;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1 id="venue">Padel availability</h1>
+        <p>Open slots matching your group rules for the coming weeks.</p>
+      </header>
+      <div class="rules" id="rules"></div>
+      <p class="meta" id="meta">Loading…</p>
+      <section>
+        <h2>Matching slots</h2>
+        <div id="list"></div>
+      </section>
+      <section class="disclaimers">
+        <h2>Cancellation disclaimers</h2>
+        <ul id="disclaimers"></ul>
+      </section>
+    </div>
+    <script>
+      const fmtDate = (iso, tz) =>
+        new Intl.DateTimeFormat(undefined, {
+          timeZone: tz,
+          weekday: "long",
+          day: "numeric",
+          month: "short",
+        }).format(new Date(iso));
+
+      const fmtTime = (iso, tz) =>
+        new Intl.DateTimeFormat(undefined, {
+          timeZone: tz,
+          hour: "2-digit",
+          minute: "2-digit",
+        }).format(new Date(iso));
+
+      function renderRules(rules) {
+        const el = document.getElementById("rules");
+        el.innerHTML = rules
+          .map((r) => {
+            const cls = r.players === 4 ? "four" : "six";
+            return `<span class="pill ${cls}">${r.label}</span>`;
+          })
+          .join("");
+      }
+
+      function groupByDate(slots, tz) {
+        const map = new Map();
+        for (const s of slots) {
+          const key = s.slot_date;
+          if (!map.has(key)) map.set(key, []);
+          map.get(key).push(s);
+        }
+        return [...map.entries()].sort(([a], [b]) => a.localeCompare(b));
+      }
+
+      async function load() {
+        const res = await fetch("/api/availability");
+        const data = await res.json();
+        if (!res.ok) {
+          document.getElementById("list").innerHTML =
+            `<div class="err">${data.error || "Failed to load"}</div>`;
+          return;
+        }
+
+        document.getElementById("venue").textContent = data.venue || "Padel";
+        renderRules(data.rules || []);
+
+        const lp = data.lastPoll;
+        const polled = lp?.finished_at
+          ? new Date(lp.finished_at).toLocaleString()
+          : "never";
+        document.getElementById("meta").innerHTML =
+          `<strong>${data.slots.length}</strong> slots · last poll ${polled}` +
+          (lp?.error ? ` · <span style="color:#f87171">error: ${lp.error}</span>` : "") +
+          ` · next ${data.weeksAhead} week(s)` +
+          (data.weekendsOnly ? " (weekends only)" : "");
+
+        const ul = document.getElementById("disclaimers");
+        ul.innerHTML = (data.disclaimers || [])
+          .map((d) => `<li>${d}</li>`)
+          .join("");
+
+        const list = document.getElementById("list");
+        if (!data.slots.length) {
+          list.innerHTML =
+            '<div class="empty">No 60‑minute or 90‑minute slots in range right now. Sync again when your venue feed updates.</div>';
+          return;
+        }
+
+        const groups = groupByDate(data.slots, data.timezone);
+        list.innerHTML = groups
+          .map(([date, slots]) => {
+            const label = fmtDate(slots[0].starts_at, data.timezone);
+            const rows = slots
+              .map((s) => {
+                const cls = s.players === 4 ? "four" : "six";
+                const court = s.court_label || `Court ${s.resource_id.slice(0, 8)}…`;
+                return `<li class="slot">
+                  <div>
+                    <div class="slot-time">${fmtTime(s.starts_at, data.timezone)} · ${s.duration_minutes} min</div>
+                    <div class="slot-sub">${court}${s.price ? " · " + s.price : ""}</div>
+                  </div>
+                  <span class="badge ${cls}">${s.players} players</span>
+                </li>`;
+              })
+              .join("");
+            return `<article class="day-group"><div class="day-head">${label}</div><ul class="slots">${rows}</ul></article>`;
+          })
+          .join("");
+      }
+
+      load();
+      setInterval(load, 5 * 60 * 1000);
+    </script>
+  </body>
+</html>

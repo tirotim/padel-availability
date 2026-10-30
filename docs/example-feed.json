@@ -1,0 +1,20 @@
+{
+  "slots": [
+    {
+      "resource_id": "court-1",
+      "court_label": "Court 1",
+      "slot_date": "2026-11-01",
+      "start_time": "18:00:00",
+      "duration_minutes": 60,
+      "price": "£48"
+    },
+    {
+      "resource_id": "court-2",
+      "court_label": "Court 2",
+      "slot_date": "2026-11-02",
+      "start_time": "10:00:00",
+      "duration_minutes": 90,
+      "price": "£72"
+    }
+  ]
+}
