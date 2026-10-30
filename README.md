@@ -13,9 +13,14 @@ Lightweight page on **Cloudflare Workers** that shows padel court slots matching
 
 ### 1. Supabase
 
-1. Create a project at [supabase.com](https://supabase.com).
-2. Run [`supabase/migrations/001_initial.sql`](supabase/migrations/001_initial.sql) in the SQL editor.
-3. Copy **Project URL** and **service_role** key.
+Project **ghomjhyonxrpyrnrmeqr** (`https://ghomjhyonxrpyrnrmeqr.supabase.co`).
+
+```bash
+npm run supabase:link
+npm run supabase:push   # or: npx supabase db query --linked -f supabase/migrations/001_initial.sql
+```
+
+Copy **service_role** (or secret) key from [Project Settings → API](https://supabase.com/dashboard/project/ghomjhyonxrpyrnrmeqr/settings/api).
 
 ### 2. Cloudflare Worker
 
@@ -26,6 +31,14 @@ cp .env.example .dev.vars
 
 npm run dev
 npm run deploy
+```
+
+Or with an API token (also used by GitHub Actions):
+
+```bash
+export CLOUDFLARE_API_TOKEN=...
+export CLOUDFLARE_ACCOUNT_ID=5c12c35da9d17d2012e0b82feff79470
+npm run deploy:api
 ```
 
 Secrets:

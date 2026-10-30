@@ -5,9 +5,10 @@
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
+    "deploy:api": "node scripts/deploy-via-api.mjs",
     "types": "wrangler types",
     "supabase:login": "supabase login",
-    "supabase:link": "supabase link --project-ref wpxkqszfnznwbpdechyq",
+    "supabase:link": "supabase link --project-ref ghomjhyonxrpyrnrmeqr",
     "supabase:push": "supabase db push"
   },
   "devDependencies": {
