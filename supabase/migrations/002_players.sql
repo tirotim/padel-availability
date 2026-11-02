@@ -9,6 +9,10 @@ create table if not exists players (
 
 alter table players enable row level security;
 
-insert into players (name)
-values ('Chris')
+insert into players (name, created_at)
+values ('Chris', clock_timestamp())
+on conflict (name) do nothing;
+
+insert into players (name, created_at)
+values ('Casey', clock_timestamp())
 on conflict (name) do nothing;
