@@ -116,6 +116,30 @@ export async function listMatchedSlots(
   return (await res.json()) as MatchedSlotRow[];
 }
 
+export type MatchScoreRow = {
+  id: string;
+  match_date: string;
+  game_number: number;
+  side_a: string[];
+  score_a: number;
+  side_b: string[];
+  score_b: number;
+};
+
+export async function listMatchScores(env: SupabaseEnv): Promise<MatchScoreRow[]> {
+  const params = new URLSearchParams({
+    select: "id,match_date,game_number,side_a,score_a,side_b,score_b",
+    order: "match_date.desc,game_number.asc",
+  });
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/match_scores?${params}`, {
+    headers: headers(env),
+  });
+  if (!res.ok) {
+    throw new Error(`Supabase match_scores select: ${await res.text()}`);
+  }
+  return (await res.json()) as MatchScoreRow[];
+}
+
 export async function listPlayerNames(env: SupabaseEnv): Promise<string[]> {
   const params = new URLSearchParams({
     select: "name",

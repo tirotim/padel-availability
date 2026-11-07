@@ -4,6 +4,7 @@ import { runAvailabilitySync, type Env as SyncEnv } from "./sync";
 import {
   getMeta,
   latestPollRun,
+  listMatchScores,
   listMatchedSlots,
   listPlayerNames,
 } from "./supabase";
@@ -28,11 +29,12 @@ export default {
     if (url.pathname === "/api/availability" && request.method === "GET") {
       try {
         requireSupabase(env);
-        const [slots, lastPoll, disclaimers, names] = await Promise.all([
+        const [slots, lastPoll, disclaimers, names, scores] = await Promise.all([
           listMatchedSlots(env),
           latestPollRun(env),
           getMeta(env, "disclaimers"),
           listPlayerNames(env),
+          listMatchScores(env),
         ]);
         return json({
           venue: env.VENUE_NAME,
@@ -42,6 +44,7 @@ export default {
           rules: BOOKING_RULES,
           disclaimers: Array.isArray(disclaimers) ? disclaimers : [],
           names,
+          scores,
           lastPoll,
           slots,
         });
