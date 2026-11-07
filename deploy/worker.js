@@ -187,6 +187,35 @@ async function listMatchedSlots(env) {
   return await res.json();
 }
 __name(listMatchedSlots, "listMatchedSlots");
+async function listMatchScores(env) {
+  const params = new URLSearchParams({
+    select: "id,match_date,game_number,side_a,score_a,side_b,score_b",
+    order: "match_date.desc,game_number.asc"
+  });
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/match_scores?${params}`, {
+    headers: headers(env)
+  });
+  if (!res.ok) {
+    throw new Error(`Supabase match_scores select: ${await res.text()}`);
+  }
+  return await res.json();
+}
+__name(listMatchScores, "listMatchScores");
+async function listPlayerNames(env) {
+  const params = new URLSearchParams({
+    select: "name",
+    order: "created_at.asc"
+  });
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/players?${params}`, {
+    headers: headers(env)
+  });
+  if (!res.ok) {
+    throw new Error(`Supabase players select: ${await res.text()}`);
+  }
+  const rows = await res.json();
+  return rows.map((row) => row.name);
+}
+__name(listPlayerNames, "listPlayerNames");
 async function getMeta(env, key) {
   const res = await fetch(
     `${env.SUPABASE_URL}/rest/v1/app_meta?key=eq.${encodeURIComponent(key)}&select=value`,
@@ -300,10 +329,12 @@ var index_default = {
     if (url.pathname === "/api/availability" && request.method === "GET") {
       try {
         requireSupabase2(env);
-        const [slots, lastPoll, disclaimers] = await Promise.all([
+        const [slots, lastPoll, disclaimers, names, scores] = await Promise.all([
           listMatchedSlots(env),
           latestPollRun(env),
-          getMeta(env, "disclaimers")
+          getMeta(env, "disclaimers"),
+          listPlayerNames(env),
+          listMatchScores(env)
         ]);
         return json({
           venue: env.VENUE_NAME,
@@ -312,6 +343,8 @@ var index_default = {
           weekendsOnly: env.WEEKENDS_ONLY === "true",
           rules: BOOKING_RULES,
           disclaimers: Array.isArray(disclaimers) ? disclaimers : [],
+          names,
+          scores,
           lastPoll,
           slots
         });
